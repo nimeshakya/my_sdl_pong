@@ -1,10 +1,14 @@
+// C++ libraries
 #include <iostream>
+#include <random>
+// SDL and extensions
 #include <SDL.h>
-
+// Custom headers
 #include "GameWindow.h"
 #include "Border.h"
 #include "Paddle.h"
 #include "BallSpawnner.h"
+#include "Ball.h"
 
 // initialize SDL and subsystems
 bool init();
@@ -87,15 +91,25 @@ int main(int argc, char* argv[])
 
 			// Game Objects
 			// border
-			Border borderTop(0, 0);
-			Border borderBot(0, SCREEN_HEIGHT - UNIT_LEN);
+			Border borderTop{ 0,0 };
+			Border borderBot{ 0, SCREEN_HEIGHT - UNIT_LEN };
 
 			// paddle
-			Paddle paddleLeft(UNIT_LEN, (SCREEN_HEIGHT - UNIT_LEN * 5) / 2);
-			Paddle paddleRight(SCREEN_WIDTH - UNIT_LEN * 2, (SCREEN_HEIGHT - UNIT_LEN * 5) / 2);
+			Paddle paddleLeft{ UNIT_LEN, (SCREEN_HEIGHT - UNIT_LEN * 5) / 2 };
+			Paddle paddleRight{ SCREEN_WIDTH - UNIT_LEN * 2, (SCREEN_HEIGHT - UNIT_LEN * 5) / 2 };
 
 			// ball spawnner
 			BallSpawnner ballSpawnner;
+			std::random_device rd;
+			std::mt19937_64 generator(rd()); // random number generator engine
+			std::uniform_int_distribution<int> distribution{ 0, (int)ballSpawnner.GetAllSpawnPositions().size() - 1 };
+
+			// ball
+			Ball ball{ ballSpawnner.GetSpawnPosition(generator, distribution) };
+
+			// for time calculations
+			Uint32 lastUpdate{ SDL_GetTicks() };
+			double deltaTime{ 0.0 };
 
 			while (!quit)
 			{
@@ -106,6 +120,27 @@ int main(int argc, char* argv[])
 						quit = true;
 					}
 				}
+				paddleLeft.HandleMovement(true);
+				paddleRight.HandleMovement(false);
+
+				// time update start (record)
+				Uint32 currentTick{ SDL_GetTicks() };
+				deltaTime = (currentTick - lastUpdate) / 1000.0f;
+				if (deltaTime > 0.5)
+				{
+					deltaTime = 0.5;
+				}
+
+				// update codes here
+				paddleLeft.Update(deltaTime);
+				paddleRight.Update(deltaTime);
+
+				ball.HandleCollision(paddleLeft, paddleRight, borderTop, borderBot);
+				ball.Update(deltaTime);
+
+				// time update end (reset)
+				lastUpdate = currentTick;
+
 				// clear renderer
 				SDL_SetRenderDrawColor(gRenderer, GameObjColor::BG_RED, GameObjColor::BG_GREEN, GameObjColor::BG_BLUE, 0xFF);
 				SDL_RenderClear(gRenderer);
@@ -116,6 +151,7 @@ int main(int argc, char* argv[])
 				paddleLeft.Render();
 				paddleRight.Render();
 				ballSpawnner.Render();
+				ball.Render();
 
 				// present rendered objects
 				SDL_RenderPresent(gRenderer);

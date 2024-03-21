@@ -23,3 +23,13 @@ void BallSpawnner::Render()
 		SDL_RenderFillRect(gRenderer, &spawn_rect);
 	}
 }
+
+Vector2 BallSpawnner::GetSpawnPosition(std::mt19937_64 gen, std::uniform_int_distribution<int> distrib)
+{
+	return mSpawnPositions[distrib(gen)];
+}
+
+std::vector<Vector2> BallSpawnner::GetAllSpawnPositions()
+{
+	return mSpawnPositions;
+}

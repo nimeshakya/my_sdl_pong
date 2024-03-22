@@ -24,9 +24,13 @@ void BallSpawnner::Render()
 	}
 }
 
-Vector2 BallSpawnner::GetSpawnPosition(std::mt19937_64 gen, std::uniform_int_distribution<int> distrib)
+Vector2 BallSpawnner::GetSpawnPosition()
 {
-	return mSpawnPositions[distrib(gen)];
+	// random number generator
+	std::mt19937_64 generator(static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count())); // random number generator engine
+	std::uniform_int_distribution<int> distribution{ 0, (int)mSpawnPositions.size() - 1 }
+	;
+	return mSpawnPositions[distribution(generator)];
 }
 
 std::vector<Vector2> BallSpawnner::GetAllSpawnPositions()

@@ -18,7 +18,7 @@ public:
 	}
 
 	// vector multiplication (scalar)
-	Vector2& operator *=(const double t)
+	Vector2& operator*=(const double t)
 	{
 		e[0] *= t;
 		e[1] *= t;

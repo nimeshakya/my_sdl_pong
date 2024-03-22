@@ -1,6 +1,5 @@
 // C++ libraries
 #include <iostream>
-#include <random>
 // SDL and extensions
 #include <SDL.h>
 // Custom headers
@@ -9,6 +8,7 @@
 #include "Paddle.h"
 #include "BallSpawnner.h"
 #include "Ball.h"
+#include "Score.h"
 
 // initialize SDL and subsystems
 bool init();
@@ -40,7 +40,7 @@ bool init()
 	}
 
 	// creating renderer and handling error
-	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (gRenderer == NULL)
 	{
 		std::cout << "Renderer could not be created! SDL_ERROR: " << SDL_GetError() << '\n';
@@ -100,16 +100,16 @@ int main(int argc, char* argv[])
 
 			// ball spawnner
 			BallSpawnner ballSpawnner;
-			std::random_device rd;
-			std::mt19937_64 generator(rd()); // random number generator engine
-			std::uniform_int_distribution<int> distribution{ 0, (int)ballSpawnner.GetAllSpawnPositions().size() - 1 };
 
 			// ball
-			Ball ball{ ballSpawnner.GetSpawnPosition(generator, distribution) };
+			Ball ball{ ballSpawnner.GetSpawnPosition() };
 
 			// for time calculations
 			Uint32 lastUpdate{ SDL_GetTicks() };
 			double deltaTime{ 0.0 };
+
+			// tracking scores
+			Score score;
 
 			while (!quit)
 			{
@@ -137,6 +137,9 @@ int main(int argc, char* argv[])
 
 				ball.HandleCollision(paddleLeft, paddleRight, borderTop, borderBot);
 				ball.Update(deltaTime);
+
+				// ball goes beyond screen
+				ball.HandleOutOfBound(ballSpawnner.GetSpawnPosition(), score);
 
 				// time update end (reset)
 				lastUpdate = currentTick;

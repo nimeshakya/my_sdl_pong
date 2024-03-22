@@ -73,8 +73,12 @@ Vector2 Ball::HandlePaddleCollision(const Paddle& paddle)
 	double ballAngle{ std::atan(changeY) };
 	double changeX{ ballDir.x() > 0 ? -std::cos(ballAngle) : std::cos(ballAngle) };
 
-	std::cout << changeX << '\t' << changeY << '\n';
 	ballDir = Vector2(changeX, changeY);
+
+	if (BALL_SPEED == INITIAL_SPEED)
+	{
+		BALL_SPEED = FINAL_SPEED;
+	}
 
 	return ballDir;
 }
@@ -105,6 +109,30 @@ Vector2 Ball::HandleBorderCollision(const Border& border)
 
 	return ballDir;
 }
+
+void Ball::Reset(Vector2 newPos)
+{
+	mPosition = newPos;
+	// change direction of new ball
+	mVelX *= -1;
+	BALL_SPEED = INITIAL_SPEED;
+}
+
+void Ball::HandleOutOfBound(Vector2 newPos, Score& score)
+{
+	if (mPosition.x() < 0.0)
+	{
+		// player 1 wins
+		Reset(newPos);
+		score.IncrementScore(false);
+	}
+	else if (mPosition.x() > SCREEN_WIDTH)
+	{
+		// player 2 wins
+		Reset(newPos);
+		score.IncrementScore(true);
+	}
+} 
 
 void Ball::Render()
 {

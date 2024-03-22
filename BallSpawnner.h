@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <random>
+#include <chrono>
 
 #include "GameWindow.h"
 #include "Vector2.h"
@@ -13,7 +14,7 @@ public:
 
 	void Render();
 	// returns random position from mSpawnPositions
-	Vector2 GetSpawnPosition(std::mt19937_64 gen, std::uniform_int_distribution<int> distrib);
+	Vector2 GetSpawnPosition();
 	std::vector<Vector2> GetAllSpawnPositions();
 private:
 	std::vector<Vector2> mSpawnPositions;

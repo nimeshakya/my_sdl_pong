@@ -9,6 +9,7 @@
 #include "BallSpawnner.h"
 #include "Ball.h"
 #include "Score.h"
+#include "Texture.h"
 
 // initialize SDL and subsystems
 bool init();
@@ -19,6 +20,7 @@ void close();
 
 SDL_Window* gWindow{ NULL };
 SDL_Renderer* gRenderer{ NULL };
+TTF_Font* gFont{ NULL };
 
 bool init()
 {
@@ -47,6 +49,21 @@ bool init()
 		return !success;
 	}
 
+	// Initialize PNG loading
+	int imgFlags = IMG_INIT_PNG;
+	if (!(IMG_Init(imgFlags) & imgFlags))
+	{
+		std::cout << "SDL_image could not initialize! SDL_image ERROR: " << IMG_GetError() << '\n';
+		return !success;
+	}
+
+	// Initialize SDL_ttf
+	if (TTF_Init() == -1)
+	{
+		std::cout << "SDL_ttf could not initialize! SDL_ttf ERROR: " << TTF_GetError() << '\n';
+		return !success;
+	}
+
 	return success;
 }
 
@@ -55,6 +72,12 @@ bool loadmedia()
 	bool success{ true }; // success flag
 
 	// load all medias (img, ttf) here
+	gFont = TTF_OpenFont("assets/VCR_OSD_MONO_1.001.ttf", 50);
+	if (gFont == NULL)
+	{
+		std::cout << "Failed to load font! SDL_ttf ERROR: " << TTF_GetError() << '\n';
+		return !success;
+	}
 
 	return success;
 }
@@ -140,6 +163,7 @@ int main(int argc, char* argv[])
 
 				// ball goes beyond screen
 				ball.HandleOutOfBound(ballSpawnner.GetSpawnPosition(), score);
+				score.UpdateScoreText();
 
 				// time update end (reset)
 				lastUpdate = currentTick;
@@ -155,6 +179,8 @@ int main(int argc, char* argv[])
 				paddleRight.Render();
 				ballSpawnner.Render();
 				ball.Render();
+
+				score.RenderScore();
 
 				// present rendered objects
 				SDL_RenderPresent(gRenderer);

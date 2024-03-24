@@ -1,5 +1,7 @@
 #pragma once
 #include <SDL.h>
+#include <SDL_ttf.h>
+#include <SDL_image.h>
 
 constexpr int SCREEN_WIDTH{ 640 };
 constexpr int SCREEN_HEIGHT{ 480 };
@@ -19,3 +21,4 @@ namespace GameObjColor
 
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
+extern TTF_Font* gFont;

@@ -10,7 +10,7 @@
 class Ball
 {
 public:
-	Ball() : INITIAL_SPEED{ 300 }, FINAL_SPEED{ 600 }, BALL_SPEED{ 300 }, mPosition{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 }, mWidth{ UNIT_LEN }, mHeight{ UNIT_LEN }, mVelX{ 1.0 }, mVelY{ 0.0 } {}
+	Ball() : INITIAL_SPEED{ 300 }, FINAL_SPEED{ 1000 }, BALL_SPEED{ 300 }, mPosition{ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 }, mWidth{ UNIT_LEN }, mHeight{ UNIT_LEN }, mVelX{ 1.0 }, mVelY{ 0.0 } {}
 	Ball(Vector2 pos) :  INITIAL_SPEED{ 300 }, FINAL_SPEED{ 500 }, BALL_SPEED{ 300 }, mPosition{ pos.x(), pos.y() }, mWidth{ UNIT_LEN }, mHeight{ UNIT_LEN }, mVelX{ 1.0 }, mVelY{ 0.0 } {}
 
 	void Update(double deltaTime);

@@ -10,6 +10,7 @@
 #include "Ball.h"
 #include "Score.h"
 #include "Texture.h"
+#include "GameAudio.h"
 
 // initialize SDL and subsystems
 bool init();
@@ -22,12 +23,16 @@ SDL_Window* gWindow{ NULL };
 SDL_Renderer* gRenderer{ NULL };
 TTF_Font* gFont{ NULL };
 
+Mix_Chunk* gAudioBeep{ NULL };
+Mix_Chunk* gAudioPeep{ NULL };
+Mix_Chunk* gAudioPlop{ NULL };
+
 bool init()
 {
 	bool success{ true }; // flag
 
 	// initializing subsystem
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
 		std::cout << "SDL could not initialize! SDL_ERROR: " << SDL_GetError() << '\n';
 		return !success;
@@ -64,6 +69,13 @@ bool init()
 		return !success;
 	}
 
+	// Initialize SDL_mixer
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		std::cout << "SDL_mixer could not initialize! SDL_mixer ERROR: " << Mix_GetError() << '\n';
+		return !success;
+	}
+
 	return success;
 }
 
@@ -76,6 +88,26 @@ bool loadmedia()
 	if (gFont == NULL)
 	{
 		std::cout << "Failed to load font! SDL_ttf ERROR: " << TTF_GetError() << '\n';
+		return !success;
+	}
+
+	// load sound effects
+	gAudioBeep = Mix_LoadWAV("assets/beep.wav");
+	if (gAudioBeep == NULL)
+	{
+		std::cout << "Failed to load beep sound effect! SDL_mixer ERROR: " << Mix_GetError() << '\n';
+		return !success;
+	}
+	gAudioPeep = Mix_LoadWAV("assets/peep.wav");
+	if (gAudioPeep == NULL)
+	{
+		std::cout << "Failed to load peep sound effect! SDL_mixer ERROR: " << Mix_GetError() << '\n';
+		return !success;
+	}
+	gAudioPlop = Mix_LoadWAV("assets/plop.wav");
+	if (gAudioPlop == NULL)
+	{
+		std::cout << "Failed to load plop sound effect! SDL_mixer ERROR: " << Mix_GetError() << '\n';
 		return !success;
 	}
 

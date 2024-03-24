@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include "Vector2.h"
 #include "GameWindow.h"
+#include "GameAudio.h"
 #include "Border.h"
 #include "Paddle.h"
 #include "Score.h"

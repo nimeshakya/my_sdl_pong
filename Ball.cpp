@@ -70,6 +70,11 @@ Vector2 Ball::HandlePaddleCollision(const Paddle& paddle)
 	{
 		changeY = 0.0f;
 	}
+
+	// play beep sound
+	Mix_PlayChannel(-1, gAudioBeep, 0);
+
+	// calculation for ball's angled movement
 	double ballAngle{ std::atan(changeY) };
 	double changeX{ ballDir.x() > 0 ? -std::cos(ballAngle) : std::cos(ballAngle) };
 
@@ -102,6 +107,10 @@ Vector2 Ball::HandleBorderCollision(const Border& border)
 	if (ballTop > borderBot) return ballDir;
 	if (ballLeft > borderRight) return ballDir;
 	if (ballRight < borderLeft) return ballDir;
+
+	// play plop sound
+	Mix_PlayChannel(-1, gAudioPlop, 0);
+
 	// translating from contact by 5.0 pixels to avoid "sticking"
 	mPosition += Vector2(ballDir.x(), (ballDir.y() > 0.0 ? -5.0 : 5.0));
 	// border will just reflect projection of ball
@@ -120,14 +129,19 @@ void Ball::Reset(Vector2 newPos)
 
 void Ball::HandleOutOfBound(Vector2 newPos, Score& score)
 {
+	// check for which bound has ball crossed
 	if (mPosition.x() < 0.0)
 	{
+		// play peep sound
+		Mix_PlayChannel(-1, gAudioPeep, 0);
 		// player 1 wins
 		Reset(newPos);
 		score.IncrementScore(false);
 	}
 	else if (mPosition.x() > SCREEN_WIDTH)
 	{
+		// play peep sound
+		Mix_PlayChannel(-1, gAudioPeep, 0);
 		// player 2 wins
 		Reset(newPos);
 		score.IncrementScore(true);

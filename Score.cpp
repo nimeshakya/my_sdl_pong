@@ -17,6 +17,12 @@ Score::Score()
 	}
 }
 
+Score::~Score()
+{
+	mP1TextTexture.free();
+	mP2TextTexture.free();
+}
+
 void Score::IncrementScore(bool forPlayer1)
 {
 	if (forPlayer1) ++player1Score;

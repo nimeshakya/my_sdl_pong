@@ -12,7 +12,7 @@ class Score
 {
 public: 
 	Score();
-
+	~Score();
 	// increases player's score
 	void IncrementScore (bool forPlayer1);
 	void UpdateScoreText();

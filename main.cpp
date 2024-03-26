@@ -12,6 +12,8 @@
 #include "Texture.h"
 #include "GameAudio.h"
 
+#include "GameManager.h"
+
 // initialize SDL and subsystems
 bool init();
 // load medias and textures
@@ -140,9 +142,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			// game loop flag
-			bool quit{ false };
-			SDL_Event e;
+			GameManager gameManager;
 
 			// Game Objects
 			// border
@@ -166,17 +166,50 @@ int main(int argc, char* argv[])
 			// tracking scores
 			Score score;
 
-			while (!quit)
+			while (!gameManager.IsGameQuitted())
 			{
-				while (SDL_PollEvent(&e) != 0)
+				while (gameManager.HasEvent())
 				{
-					if (e.type == SDL_QUIT)
+					if (gameManager.GetEvent().type == SDL_QUIT)
 					{
-						quit = true;
+						gameManager.QuitGame();
+					}
+
+					if (gameManager.GetEvent().type == SDL_KEYDOWN)
+					{
+						if (gameManager.GetEvent().key.keysym.sym == SDLK_r && gameManager.IsPausedByGameEvent())
+						{
+							score.Reset();
+							ball.Reset(ballSpawnner.GetSpawnPosition());
+							gameManager.Reset();
+						}
+					}
+
+					if (gameManager.GetEvent().type == SDL_KEYDOWN)
+					{
+						switch (gameManager.GetEvent().key.keysym.sym)
+						{
+						case SDLK_SPACE:
+							gameManager.Start();
+							break;
+						case SDLK_p:
+							gameManager.PauseToggleGame();
+							break;
+						case SDLK_f:
+							gameManager.GameEventPauseToggle();
+							gameManager.SetPauseText("FUCKKKK!!!!");
+							break;
+						default:
+							break;
+						}
 					}
 				}
-				paddleLeft.HandleMovement(true);
-				paddleRight.HandleMovement(false);
+				// input handling (continuous)
+				if (!gameManager.IsPaused() && !gameManager.IsPausedByGameEvent())
+				{
+					paddleLeft.HandleMovement(true);
+					paddleRight.HandleMovement(false);
+				}
 
 				// time update start (record)
 				Uint32 currentTick{ SDL_GetTicks() };
@@ -186,16 +219,21 @@ int main(int argc, char* argv[])
 					deltaTime = 0.5;
 				}
 
-				// update codes here
-				paddleLeft.Update(deltaTime);
-				paddleRight.Update(deltaTime);
+				// game updates (physics...barely...not even)
+				if (!gameManager.IsPaused() && !gameManager.IsPausedByGameEvent())
+				{
+					// update codes here
+					paddleLeft.Update(deltaTime);
+					paddleRight.Update(deltaTime);
 
-				ball.HandleCollision(paddleLeft, paddleRight, borderTop, borderBot);
-				ball.Update(deltaTime);
+					ball.HandleCollision(paddleLeft, paddleRight, borderTop, borderBot);
+					ball.Update(deltaTime);
 
-				// ball goes beyond screen
-				ball.HandleOutOfBound(ballSpawnner.GetSpawnPosition(), score);
-				score.UpdateScoreText();
+					// ball goes beyond screen
+					ball.HandleOutOfBound(ballSpawnner.GetSpawnPosition(), score);
+					score.UpdateScoreText();
+					score.HandlePlayerWin(gameManager);
+				}
 
 				// time update end (reset)
 				lastUpdate = currentTick;
@@ -204,15 +242,35 @@ int main(int argc, char* argv[])
 				SDL_SetRenderDrawColor(gRenderer, GameObjColor::BG_RED, GameObjColor::BG_GREEN, GameObjColor::BG_BLUE, 0xFF);
 				SDL_RenderClear(gRenderer);
 				
-				// render objects
-				borderTop.Render();
-				borderBot.Render();
-				paddleLeft.Render();
-				paddleRight.Render();
-				ballSpawnner.Render();
-				ball.Render();
+				// renders
+				if (gameManager.IsPausedByGameEvent() && score.HasPlayerWon())
+				{
+					score.RenderPlayerWinText();
+				}
+				else if (gameManager.IsPaused() && gameManager.IsPausedByGameEvent())
+				{
+					gameManager.RenderPause();
+				}
+				else if (gameManager.IsPaused())
+				{
+					gameManager.RenderPause();
+				}
+				else if (gameManager.IsPausedByGameEvent())
+				{
+					gameManager.RenderPause();
+				}
+				else
+				{
+					// render objects
+					borderTop.Render();
+					borderBot.Render();
+					paddleLeft.Render();
+					paddleRight.Render();
+					ballSpawnner.Render();
+					ball.Render();
 
-				score.RenderScore();
+					score.RenderScore();
+				}
 
 				// present rendered objects
 				SDL_RenderPresent(gRenderer);

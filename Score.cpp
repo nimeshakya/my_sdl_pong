@@ -15,6 +15,8 @@ Score::Score()
 	{
 		std::cout << "Failed to render text texture!\n";
 	}
+	mGameContinueTexture.loadFromRenderedText("Press 'R' to restart!", textColor);
+	hasPlayerWon = false;
 }
 
 Score::~Score()
@@ -29,6 +31,34 @@ void Score::IncrementScore(bool forPlayer1)
 	else ++player2Score;
 
 	std::cout << player1Score << '\t' << player2Score << '\n';
+}
+
+void Score::HandlePlayerWin(GameManager& gameManager)
+{
+	SDL_Color textColor = { GameObjColor::OB_RED, GameObjColor::OB_GREEN, GameObjColor::OB_BLUE };
+	if (player1Score > 10)
+	{
+		mPlayerWinTexture.loadFromRenderedText("Player 1 win!", textColor);
+		gameManager.GameEventPauseToggle();
+		hasPlayerWon = true;
+	}
+	else if (player2Score > 10)
+	{
+		mPlayerWinTexture.loadFromRenderedText("Player 2 win!", textColor);
+		gameManager.GameEventPauseToggle();
+		hasPlayerWon = true;
+	}
+}
+
+void Score::RenderPlayerWinText()
+{
+	mPlayerWinTexture.Render((SCREEN_WIDTH - mPlayerWinTexture.getWidth()) / 2, (SCREEN_HEIGHT - mPlayerWinTexture.getHeight()) / 2 - mPlayerWinTexture.getHeight());
+	mGameContinueTexture.Render((SCREEN_WIDTH - mGameContinueTexture.getWidth()) / 2, (SCREEN_HEIGHT - mPlayerWinTexture.getHeight()) / 2);
+}
+
+bool Score::HasPlayerWon()
+{
+	return hasPlayerWon;
 }
 
 void Score::UpdateScoreText()
@@ -57,4 +87,5 @@ void Score::Reset()
 {
 	player1Score = 0;
 	player2Score = 0;
+	hasPlayerWon = false;
 }

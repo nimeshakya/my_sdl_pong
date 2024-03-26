@@ -74,6 +74,10 @@
     <ExternalIncludePath>C:\vclib\SDL2_mixer-2.8.0\include;C:\vclib\SDL2_image-2.8.2\include;C:\vclib\SDL2_ttf-2.22.0\include;C:\vclib\SDL2-2.30.1\include;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>C:\vclib\SDL2_mixer-2.8.0\lib\x64;C:\vclib\SDL2_image-2.8.2\lib\x64;C:\vclib\SDL2_ttf-2.22.0\lib\x64;C:\vclib\SDL2-2.30.1\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\vclib\SDL2_mixer-2.8.0\include;C:\vclib\SDL2_image-2.8.2\include;C:\vclib\SDL2_ttf-2.22.0\include;C:\vclib\SDL2-2.30.1\include;$(ExternalIncludePath)</IncludePath>
+    <LibraryPath>C:\vclib\SDL2_mixer-2.8.0\lib\x64;C:\vclib\SDL2_image-2.8.2\lib\x64;C:\vclib\SDL2_ttf-2.22.0\lib\x64;C:\vclib\SDL2-2.30.1\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -124,18 +128,21 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>-mwindows </AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;SDL2_ttf.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="BallSpawnner.cpp" />
     <ClCompile Include="Border.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="Score.cpp" />
@@ -146,6 +153,7 @@
     <ClInclude Include="BallSpawnner.h" />
     <ClInclude Include="Border.h" />
     <ClInclude Include="GameAudio.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameWindow.h" />
     <ClInclude Include="Paddle.h" />
     <ClInclude Include="Score.h" />

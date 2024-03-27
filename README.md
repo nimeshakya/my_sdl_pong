@@ -6,11 +6,11 @@ A classic pong game made using SDL and C++ for practicing C++ as well as making 
 
 ## SDL Extensions
 
-Along with the SDL library, the project also uses some SDL extensions. They are:
+Along with the [SDL library](https://github.com/libsdl-org/SDL), the project also uses some SDL extensions. They are:
 
--   SDL_ttf
--   SDL_image
--   SDL_mixer
+-   [SDL_ttf](https://github.com/libsdl-org/SDL_ttf0
+-   [SDL_image](https://github.com/libsdl-org/SDL_image)
+-   [SDL_mixer](https://github.com/libsdl-org/SDL_mixer)
 
 ## Game Assets
 

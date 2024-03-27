@@ -7,12 +7,32 @@ A classic pong game made using SDL and C++ for practicing C++ as well as making 
 ## SDL Extensions
 
 Along with the SDL library, the project also uses some SDL extensions. They are:
-* SDL_ttf
-* SDL_image
-* SDL_mixer
+
+-   SDL_ttf
+-   SDL_image
+-   SDL_mixer
 
 ## Game Assets
 
 While the game objects such as the ball and paddles were created using the SDL function for rendering filled rectangle, the text font and sound effects were downloaded from the free-to-use sources.
-* Font: [VCR_OSD_MONO](https://www.dafont.com/vcr-osd-mono.font)
-* Sound Effects: [opengameart.org](https://opengameart.org/content/3-ping-pong-sounds-8-bit-style)
+
+-   Font: [VCR_OSD_MONO](https://www.dafont.com/vcr-osd-mono.font)
+-   Sound Effects: [opengameart.org](https://opengameart.org/content/3-ping-pong-sounds-8-bit-style)
+
+## Output
+
+### Start Screen
+
+![start_screen](./output_screenshots/start_splash.jpg)
+
+### Gameplay
+
+![gameplay_gif](./output_screenshots/gameplay.gif)
+
+### Pause Screen
+
+![pause_screen](./output_screenshots/paused.jpg)
+
+### Player Win Screen
+
+![player_win_screen](./output_screenshots/win.jpg)

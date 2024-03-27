@@ -14,5 +14,5 @@ Along with the SDL library, the project also uses some SDL extensions. They are:
 ## Game Assets
 
 While the game objects such as the ball and paddles were created using the SDL function for rendering filled rectangle, the text font and sound effects were downloaded from the free-to-use sources.
-* Font: [https://www.dafont.com/vcr-osd-mono.font](VCR_OSD_MONO)
-* Sound Effects: [https://opengameart.org/content/3-ping-pong-sounds-8-bit-style](opengameart.org)
+* Font: [VCR_OSD_MONO](https://www.dafont.com/vcr-osd-mono.font)
+* Sound Effects: [opengameart.org](https://opengameart.org/content/3-ping-pong-sounds-8-bit-style)

@@ -4,6 +4,8 @@
 
 A classic pong game made using SDL and C++ for practicing C++ as well as making game logics and functions.
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/watch?v=L_oH9gzMiN0.jpg)](https://youtu.be/L_oH9gzMiN0?si=4OeGCRJUKY_JZ5YV)
+
 ## SDL Extensions
 
 Along with the [SDL library](https://github.com/libsdl-org/SDL), the project also uses some SDL extensions. They are:
